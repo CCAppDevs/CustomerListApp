@@ -12,17 +12,26 @@ namespace CustomerListApp
 {
     public partial class CustomerForm : Form
     {
-        public string data { get; set; }
+        private Customer _customer;
 
-        public CustomerForm(string test)
+        public CustomerForm()
         {
+            // bunch of logic here
             InitializeComponent();
-            data = test;
+            _customer = new Customer();
+        }
+
+        public void LoadCustomer(Customer customer)
+        {
+            _customer = customer;
         }
 
         private void CustomerForm_Load(object sender, EventArgs e)
         {
-            label1.Text = "Customer Name:";
+            txtFirstName.DataBindings.Add("Text", _customer, "FirstName");
+            txtLastName.DataBindings.Add("Text", _customer, "LastName");
+            txtEmail.DataBindings.Add("Text", _customer, "Email");
+            txtPhone.DataBindings.Add("Text", _customer, "Phone");
         }
     }
 }

@@ -16,16 +16,24 @@ namespace CustomerListApp
         private void btnNewCustomer_Click(object sender, EventArgs e)
         {
             // fire code to create a new customer form
-
-            var test = "test data";
-
-            var newCustomerForm = new CustomerForm(test);
+            var newCustomerForm = new CustomerForm();
             newCustomerForm.ShowDialog();
         }
 
         private void btnEditCustomer_Click(object sender, EventArgs e)
         {
             // fire code to edit the selected customer form
+            var customerForm = new CustomerForm();
+            
+            // add customer data (this is temporary)
+            customerForm.LoadCustomer(new Customer { 
+                FirstName = "Jesse",
+                LastName = "Harlan",
+                Email = "jesse.harlan@centralia.edu",
+                Phone = "555-555-5555"
+            });
+
+            customerForm.ShowDialog();
         }
     }
 }
