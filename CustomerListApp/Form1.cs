@@ -5,12 +5,39 @@ namespace CustomerListApp
     public partial class Form1 : Form
     {
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public List<Customer> Customers { get; set; }
+        public BindingList<Customer> Customers { get; set; }
 
         public Form1()
         {
             InitializeComponent();
-            Customers = new List<Customer>();
+            Customers = new BindingList<Customer>
+            {
+                AllowNew = true,
+                AllowRemove = true,
+                AllowEdit = false
+            };
+
+            //Customers.AddRange(new List<Customer>
+            //{
+            //    new Customer {
+            //        FirstName = "John",
+            //        LastName = "Smith",
+            //        Email = "john.smith@email.com",
+            //        Phone = "555-555-5555"
+            //    },
+            //    new Customer {
+            //        FirstName = "Jane",
+            //        LastName = "Doe",
+            //        Email = "jane.doe@email.com",
+            //        Phone = "555-555-5556"
+            //    },
+            //    new Customer {
+            //        FirstName = "Bob",
+            //        LastName = "Smith",
+            //        Email = "bob.smith@email.com",
+            //        Phone = "555-555-5557"
+            //    },
+            //});
         }
 
         private void btnNewCustomer_Click(object sender, EventArgs e)
@@ -22,10 +49,6 @@ namespace CustomerListApp
             {
                 // add the customer to the list of customers
                 Customers.Add(newCustomerForm.GetCustomer());
-                
-                // refresh the datagridview
-                dgvCustomers.DataSource = null;
-                dgvCustomers.DataSource = Customers;
             }
         }
 
@@ -34,18 +57,23 @@ namespace CustomerListApp
             // fire code to edit the selected customer form
             var customerForm = new CustomerForm();
 
-            // add customer data (this is temporary)
-            customerForm.LoadCustomer(new Customer
+
+            // get the selected customer from the datagridview
+            var selectedCustomer = dgvCustomers.CurrentRow?.DataBoundItem as Customer;
+
+            // be defensive and make sure a customer is selected before trying to load the form
+            if (selectedCustomer == null)
             {
-                FirstName = "Jesse",
-                LastName = "Harlan",
-                Email = "jesse.harlan@centralia.edu",
-                Phone = "555-555-5555"
-            });
+                MessageBox.Show("Please select a customer to edit.");
+                return;
+            }
+
+            // add customer data (based on what customer is currently selected)
+            customerForm.LoadCustomer(selectedCustomer);
 
             if (customerForm.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show("Dialog returned an ok.");
+                // update the customer in the list of customers
             }
         }
 
